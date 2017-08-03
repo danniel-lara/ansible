@@ -1,0 +1,5 @@
+Exemple
+
+[Servers1]
+web ansible_sudo_flags='-H' ansible_ssh_port=22022 ansible_ssh_host=xxx.xx.xxx.xx
+db ansible_ssh_port=22023 ansible_ssh_host=xxx.xx.xxx.xx
