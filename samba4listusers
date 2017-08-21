@@ -1,0 +1,4 @@
+- hosts: all
+  tasks:
+  - name: lista usuarios samba4
+    command: samba-tool user list
