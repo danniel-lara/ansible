@@ -1,0 +1,4 @@
+- hosts: ldap
+  tasks:
+  - name: troca senha usuario
+    shell: (echo "password"; echo "password") | smbldap-passwd user
