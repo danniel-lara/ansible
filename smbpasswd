@@ -1,0 +1,4 @@
+ hosts: samba3
+  tasks:
+  - name: lista usuarios samba3
+    shell: (echo "password"; echo "password") | smbpasswd -s -a user
