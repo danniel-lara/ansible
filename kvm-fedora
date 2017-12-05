@@ -1,0 +1,10 @@
+- hosts: kvm
+  tasks:
+
+  - name: install the 'Virtualization' package group
+    dnf: 
+     name: "@virtualization" 
+     state: present
+ 
+  - name: enable and start libvirt
+    service: name=libvirtd state=restarted enabled=yes
