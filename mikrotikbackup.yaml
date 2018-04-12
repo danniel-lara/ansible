@@ -1,0 +1,10 @@
+- name: Mikrotik
+  hosts: mikrotik
+  gather_facts: no
+  serial: 1
+  tasks:
+  - name: backup mikrotik
+    raw: /system backup save name {{inventory_hostname}}; quit
+  
+  - name: copia para Servidor Ansible
+    local_action: command scp -r -P {{ ansible_ssh_port }} {{ ansible_ssh_user }}@{{ ansible_ssh_host }}:/{{inventory_hostname}}.backup /backup/
