@@ -1,0 +1,7 @@
+- name: Mikrotik
+  hosts: all
+  gather_facts: no
+  serial: 1
+  tasks:
+    - name: update mikrotik
+      raw: :execute {system package update check-for-updates;system package update install;delay 1;quit}
