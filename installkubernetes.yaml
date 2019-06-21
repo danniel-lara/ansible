@@ -1,0 +1,73 @@
+- hosts: all
+   user: root
+   become: yes
+   tasks:
+     - name: "Installing Docker Prerequisite packages"
+       yum:
+         name: "{{ item }}"
+         state: latest
+       with_items:
+          - yum-utils
+          - device-mapper-persistent-data
+          - lvm2
+     - name: "Configuring docker-ce repo"
+       get_url:
+          url: https://download.docker.com/linux/centos/docker-ce.repo
+          dest: /etc/yum.repos.d/docker-ce.repo
+          mode: 0644
+     
+     - name: " Instalando a última versão Docker"
+       yum:
+          name: docker-ce
+          state: present
+     
+     - name: " Inicia e ativa na inicialização o serviço do Docker"
+       service:
+         name: docker
+         state: started
+         enabled: yes
+     
+     - name: " net.bridge.bridge-nf-call-ip6tables seta para 1"
+       sysctl:
+        name: net.bridge.bridge-nf-call-ip6tables
+        value: 1
+        state: present
+
+     - name: " net.bridge.bridge-nf-call-iptables seta para 1"
+       sysctl:
+        name: net.bridge.bridge-nf-call-iptables
+        value: 1
+        state: present
+
+     - name: "Adiciona repositório do Kubernetes" 
+       yum_repository:
+        name: Kubernetes
+        description: Kubernetes YUM repository
+        baseurl: https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+        gpgkey: https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+        gpgcheck: yes
+
+     - name: "Instala kubelet"
+       yum:
+          name: kubelet
+          state: present
+          update_cache: true
+
+     - name: "instala kubeadm"
+       yum:
+          name: kubeadm
+          state: present
+
+     - name: "Inicia o serviço do kubelet"
+       service:
+         name: kubelet
+         enabled: yes
+         state: started
+
+ - hosts: master
+   become: yes
+   tasks:
+   - name: "Instala kubectl"
+     yum:
+        name: kubectl
+        state: present
