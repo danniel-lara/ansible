@@ -1,0 +1,31 @@
+- hosts: all
+  user: root
+  tasks:
+    - name: Instala a ultima versão do apache
+      dnf:
+         name: httpd
+         state: latest
+    
+    - name: Copia o arquivo para o diretório root do apache
+      template: 
+        src: /etc/ansible/index.html 
+        dest: /var/www/html
+        owner: apache 
+        group: apache 
+        mode: 0644
+
+    - name: Inicia e Ativa na inicialização
+      systemd: 
+        name: httpd
+        state: started
+        enabled: yes
+
+    - name: Libera acesso a porta 80 
+      firewalld:
+       service: http
+       permanent: true
+       state: enabled
+    - name: Reinicia o FirewallD
+      service: 
+        name: firewalld 
+        state: restarted
